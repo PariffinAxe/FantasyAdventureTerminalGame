@@ -7,35 +7,35 @@ public class Room {
   private RoomType roomType;
   private double enemyHealth = 10.0;
   private double enemyDamage = 1.0;
+  private ArrayList<Enemy> enemies;
 
-  public Room(int floor){
+  public Room(int floor, boolean boss){
     RoomType[] roomTypes = RoomType.values();
     int size = roomTypes.length;
     int index = (int) Math.floor(Math.random()*size);
     this.roomType = roomTypes[index];
     this.enemyHealth = this.enemyHealth * (Math.pow(1.05, floor+1)) * roomType.getEnemyDifficulty();
     this.enemyDamage = this.enemyDamage * (Math.pow(1.05, floor+1)) * roomType.getEnemyDifficulty();
-    roundDamageHealth();
+    if (boss){
+      this.enemyHealth = this.enemyHealth * 5;
+      this.enemyDamage = this.enemyDamage * 5;
+    }
+    enemies = new ArrayList<Enemy>();
+    populateRoom();
   }
 
-  public String getEnemies(){
-    return roomType.getEnemyName();
+  private void populateRoom(){
+    for (int i = 0 ; i < roomType.getNoEnemies() ; i++){
+      Enemy enemy = new Enemy(roomType.getEnemyName(), this.enemyDamage, this.enemyHealth);
+      enemies.add(enemy);
+    }
   }
 
-  public int getNoEnemies(){
-    return roomType.getNoEnemies();
+  public ArrayList<Enemy> getEnemies() {
+    return enemies;
   }
 
-  public void roundDamageHealth(){
-    this.enemyHealth = Math.round(this.enemyHealth * 100) / 100;
-    this.enemyDamage = Math.round(this.enemyDamage * 100) / 100;
-  }
-
-  public double getEnemyHealth() {
-    return enemyHealth;
-  }
-
-  public double getEnemyDamage() {
-    return enemyDamage;
+  public RoomType getRoomType() {
+    return roomType;
   }
 }

@@ -1,9 +1,8 @@
 package PlayerStuff;
 
-import Behaviours.ITakeDamage;
 import Weapons.Weapon;
 
-public abstract class Character implements ITakeDamage {
+public abstract class Character {
 
   private final String name;
   private int xp;
